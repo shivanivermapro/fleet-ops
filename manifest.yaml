@@ -1,0 +1,326 @@
+# Fleet manifest - single source of truth for fleet scripts.
+# Generated 2026-08-11 from empirical discovery (gh repo view + on-disk scan).
+# Workspace root: ~/github (confirmed). Control dir: ~/github/.fleet.
+#
+# Conventions:
+#   install: verbatim command run from the repo root; "none" = nothing to install.
+#   provides_bin: executables expected on PATH after install (empirically verified).
+#   install_mechanism: how the bin reaches PATH today.
+#   sync: include in daily upstream sync (ff-only policy; diverged forks are logged, never merged).
+
+- name: lavish-axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/lavish-axi
+  default_branch: main
+  path: ~/github/lavish-axi
+  kind: cli
+  toolchain: [node@>=22, pnpm@11.5.2]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link: /opt/homebrew/lib/node_modules/lavish-axi -> repo; build is live immediately"
+  provides_bin: [lavish-axi]
+  aliases: {jump: cdlav, run: lav}
+  sync: true
+  notes: "HTML artifact editor CLI. Ships Claude skill (skills/lavish) and plugin.json. Already in sync-forks."
+
+- name: firstmate
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/firstmate
+  default_branch: main
+  path: ~/github/firstmate
+  kind: config
+  toolchain: [bash]
+  install: "none"
+  install_mechanism: "clone is the distro: AGENTS.md + skills + bin/fm-* helper scripts invoked in-repo by agent harnesses; nothing goes on PATH"
+  provides_bin: []
+  aliases: {jump: cdfm}
+  sync: true
+  notes: "Agent-crew orchestration distro (tmux/worktree based). Provides the stow skill via ic-link. Already in sync-forks."
+
+- name: no-mistakes
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/no-mistakes
+  default_branch: main
+  path: ~/github/no-mistakes
+  kind: cli
+  toolchain: [go]
+  install: "make install"
+  install_mechanism: "make install -> $(go env GOPATH)/bin/no-mistakes (upstream moved the target from ~/.local/bin on 2026-08-12) and restarts the daemon. A refreshed copy sits in ~/.local/bin until the go/bin PATH entry lands via rebuild; retire it after."
+  provides_bin: [no-mistakes]
+  aliases: {jump: cdnm, run: nm}
+  sync: true
+  notes: "Ship gate pipeline (review/tests/lint/push/PR/CI). Has its own LaunchAgent daemon (com.kunchenguid.no-mistakes.daemon). Ships Claude skill. Already in sync-forks."
+
+- name: axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/axi
+  default_branch: main
+  path: ~/github/axi
+  kind: library
+  toolchain: [node, pnpm@11.1.1]
+  install: "pnpm install"
+  install_mechanism: "no bin; monorepo with packages/axi-sdk-js plus catalog.yaml/principles.yaml; axi skill linked from .agents/skills/axi by ic-link"
+  provides_bin: []
+  aliases: {jump: cdaxi}
+  sync: true
+  notes: "AXI design principles + JS SDK. Docs tooling only at root. Already in sync-forks."
+
+- name: chrome-devtools-axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/chrome-devtools-axi
+  default_branch: main
+  path: ~/github/chrome-devtools-axi
+  kind: cli
+  toolchain: [node@>=20, pnpm@11.1.1]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules"
+  provides_bin: [chrome-devtools-axi]
+  aliases: {jump: cdcda, run: cda}
+  sync: true
+  notes: "Agent-ergonomic browser automation CLI. Ships Claude skill. Already in sync-forks."
+
+- name: gh-axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/gh-axi
+  default_branch: main
+  path: ~/github/gh-axi
+  kind: cli
+  toolchain: [node@>=20, pnpm@11.1.1]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules. NOT a gh extension (verified: gh extension list is empty; it is a standalone npm CLI)"
+  provides_bin: [gh-axi]
+  aliases: {jump: cdgha, run: gha}
+  sync: true
+  notes: "GitHub CLI for agents. Ships Claude skill. Already in sync-forks."
+
+- name: autopreso
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/autopreso
+  default_branch: main
+  path: ~/github/autopreso
+  kind: cli
+  toolchain: [node@>=24, npm]
+  install: "npm install"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules (linked 2026-08-11)"
+  provides_bin: [autopreso]
+  aliases: {jump: cdap, run: ap}
+  sync: true
+  notes: "Realtime speech-to-presentation. Not in old sync-forks list; added under fleet sync."
+
+- name: baby-menu
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/baby-menu
+  default_branch: main
+  path: ~/github/baby-menu
+  kind: app
+  toolchain: [node@>=22.12, pnpm@11.1.1]
+  install: "pnpm install"
+  install_mechanism: "Electron menu-bar app; run with pnpm dev, package with pnpm package:mac. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdbm}
+  sync: true
+  notes: "Not in current sync-forks list; added under fleet sync."
+
+- name: tasks-axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/tasks-axi
+  default_branch: main
+  path: ~/github/tasks-axi
+  kind: cli
+  toolchain: [node@>=20, pnpm@11.1.1]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules"
+  provides_bin: [tasks-axi]
+  aliases: {jump: cdta, run: ta}
+  sync: true
+  notes: "Backlog/task CLI. Ships Claude skill. Already in sync-forks."
+
+- name: quota-axi
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/quota-axi
+  default_branch: main
+  path: ~/github/quota-axi
+  kind: cli
+  toolchain: [node@>=22.19, pnpm@11.1.1]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules"
+  provides_bin: [quota-axi]
+  aliases: {jump: cdqa, run: qa}
+  sync: true
+  notes: "LLM subscription quota CLI. Ships Claude skill. Already in sync-forks."
+
+- name: treehouse
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/treehouse
+  default_branch: main
+  path: ~/github/treehouse
+  kind: cli
+  toolchain: [go, nix-flake]
+  install: "make build && install -m 755 treehouse \"$(go env GOPATH)/bin/treehouse\""
+  install_mechanism: "explicit install to go/bin: upstream's make install uses the make-level $(GOPATH), unset under launchd, and would fall back to /usr/local/bin. A refreshed copy sits in ~/.local/bin until the go/bin PATH entry lands via rebuild; retire it after."
+  provides_bin: [treehouse]
+  aliases: {jump: cdth, run: th}
+  sync: true
+  notes: "Git worktree manager. Already in sync-forks."
+
+- name: short-pipe
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/short-pipe
+  default_branch: main
+  path: ~/github/short-pipe
+  kind: app
+  toolchain: [node, pnpm@11.1.1]
+  install: "pnpm install"
+  install_mechanism: "Electron app (video shorts editing); run with pnpm start, package with pnpm package:mac. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdsp}
+  sync: true
+  notes: "Not in current sync-forks list; added under fleet sync."
+
+- name: trial-by-combat
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/trial-by-combat
+  default_branch: main
+  path: ~/github/trial-by-combat
+  kind: benchmark
+  toolchain: [node, npm]
+  install: "npm install"
+  install_mechanism: "run with npm start. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdtbc}
+  sync: true
+  notes: "Two-LLM grid combat arena/benchmark. Not in current sync-forks list; added under fleet sync."
+
+- name: justroll
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/justroll
+  default_branch: main
+  path: ~/github/justroll
+  kind: cli
+  toolchain: [node@>=20, pnpm@11.1.1]
+  install: "pnpm install"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules (linked 2026-08-11)"
+  provides_bin: [justroll]
+  aliases: {jump: cdjr, run: jr}
+  sync: true
+  notes: "Not in old sync-forks list; added under fleet sync."
+
+- name: presize
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/presize
+  default_branch: main
+  path: ~/github/presize
+  kind: app
+  toolchain: [node@20, pnpm@8.6.2]
+  install: "pnpm install"
+  install_mechanism: "web app monorepo (presize.io). Pins pnpm@8.6.2 via packageManager - use corepack/pnpm dlx, do not force global pnpm 11 here."
+  provides_bin: []
+  aliases: {jump: cdpz}
+  sync: true
+  notes: "Oldest repo (last push 2026-05). Not in current sync-forks list; added under fleet sync."
+
+- name: org-bench
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/org-bench
+  default_branch: main
+  path: ~/github/org-bench
+  kind: benchmark
+  toolchain: [node, npm]
+  install: "npm install"
+  install_mechanism: "benchmark monorepo; npm run bench. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdob}
+  sync: true
+  notes: "Not in current sync-forks list; added under fleet sync."
+
+- name: superpowers-bench
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/superpowers-bench
+  default_branch: master
+  path: ~/github/superpowers-bench
+  kind: benchmark
+  toolchain: [node, npm]
+  install: "npm install"
+  install_mechanism: "npm run bench. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdsb}
+  sync: true
+  notes: "Default branch is master, not main. Not in current sync-forks list; added under fleet sync."
+
+- name: programbench-bench
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/programbench-bench
+  default_branch: main
+  path: ~/github/programbench-bench
+  kind: benchmark
+  toolchain: [bash, python, docker]
+  install: "none"
+  install_mechanism: "harness of shell scripts + analysis python; runs against Docker dep volumes. Nothing to install globally."
+  provides_bin: []
+  aliases: {jump: cdpb}
+  sync: true
+  notes: "Harness-variation study on the ProgramBench paper tasks. Not in current sync-forks list; added under fleet sync."
+
+- name: dotfiles-nix
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/dotfiles-mac-nix
+  default_branch: main
+  path: ~/github/dotfiles-nix
+  kind: config
+  toolchain: [nix-flake, nix-darwin, home-manager]
+  install: "sudo darwin-rebuild switch --flake ~/github/dotfiles-nix"
+  install_mechanism: "nix-darwin + home-manager flake; owns ~/.zshrc, ~/.zprofile, ~/.zshenv, ~/.config/git/config (store symlinks), files/bin on PATH, sync-forks LaunchAgent"
+  provides_bin: [gprune, ic-doctor, ic-link, note, scratch, sync-forks, sysinfo, up]
+  aliases: {jump: cddot}
+  sync: false
+  notes: "SOURCE OF TRUTH for shell/git config. sync: false is deliberate: this fork carries fork-specific commits and syncs from upstream via manual merge-commit PRs (see its CLAUDE.md); it can never fast-forward, so ff-only sync would misreport it as diverged daily. Branch chore/sync-upstream-genealogy merged to main 2026-08-11. Upstream repo name differs: dotfiles-mac-nix."
+
+# --- Absorbed from the old sync-forks list (decision 2026-08-11: one list to rule them all) ---
+
+- name: gnhf
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/gnhf
+  default_branch: main
+  path: ~/github/gnhf
+  kind: cli
+  toolchain: [node@>=20, pnpm@11.1.1]
+  install: "pnpm install --frozen-lockfile && pnpm run build"
+  install_mechanism: "npm-link into /opt/homebrew/lib/node_modules"
+  provides_bin: [gnhf]
+  aliases: {jump: cdgnhf, run: gn}
+  sync: true
+  notes: "Overnight agent-run manager (good night, have fun). Ships Claude skill. Was in old sync-forks list; not part of the original 19."
+
+- name: wheelhouse
+  owner: shreejitverma
+  is_fork: true
+  upstream: kunchenguid/wheelhouse
+  default_branch: main
+  path: ~/github/wheelhouse
+  kind: config
+  toolchain: [python]
+  install: "none"
+  install_mechanism: "IssueOps command center driven by GitHub Actions; nothing installs locally. No PATH bin."
+  provides_bin: []
+  aliases: {jump: cdwh}
+  sync: true
+  notes: "Reconciled with upstream locally on 2026-08-12 (merge commit); 3 local commits await a deliberate push (sync never auto-publishes ahead-only work). Was in old sync-forks list; not part of the original 19."

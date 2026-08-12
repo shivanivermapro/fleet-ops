@@ -1,0 +1,8 @@
+# Fleet identity enforcement - included for every repo under ~/github/
+# via includeIf "gitdir:~/github/" (tracked in dotfiles-nix nix/home/common.nix).
+# Regenerable; do not put anything here except identity.
+[user]
+	name = Shreejit Verma
+	email = shreejitverma@gmail.com
+[github]
+	user = shreejitverma
