@@ -34,7 +34,7 @@ entries() {
     }
     /^- name:/      { flush(); name = $3 }
     /^  upstream:/  { upstream = $2 }
-    /^  install:/   { install = $0; sub(/^  install: */, "", install); gsub(/^"|"$/, "", install) }
+    /^  install:/   { install = $0; sub(/^  install: */, "", install); gsub(/^"|"$/, "", install); gsub(/\\"/, "\"", install) }
     /^  provides_bin:/ {
       bins = $0; sub(/^  provides_bin: *\[/, "", bins); sub(/\].*/, "", bins); gsub(/,/, " ", bins)
     }
@@ -101,7 +101,9 @@ done < <(entries)
 
 # Regenerate aliases from the manifest so the two never drift.
 if [ -x "$FLEET_DIR/gen-aliases.sh" ]; then
-  "$FLEET_DIR/gen-aliases.sh" >>"$LOG" 2>&1 && log "aliases.zsh regenerated"
+  "$FLEET_DIR/gen-aliases.sh" >>"$LOG" 2>&1 \
+    && log "aliases.zsh regenerated" \
+    || { log "gen-aliases FAILED"; failures="$failures gen-aliases"; }
 fi
 
 log "===== bootstrap done. failures:[${failures:- none} ] ====="

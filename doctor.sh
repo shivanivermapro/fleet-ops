@@ -147,6 +147,12 @@ else
 fi
 
 echo "== smoke =="
+if command -v timeout >/dev/null 2>&1; then
+  run_limited() { timeout 10 "$@"; }
+else
+  warn "timeout not on PATH (brew install coreutils); smoke tests run without a 10s limit"
+  run_limited() { "$@"; }
+fi
 while IFS='|' read -r name branch upstream kind bins; do
   # Only kind: cli binaries answer --version/--help. Running arbitrary
   # utility scripts (dotfiles' up, sync-forks, note, ...) with junk args
@@ -156,8 +162,8 @@ while IFS='|' read -r name branch upstream kind bins; do
     command -v "$b" >/dev/null 2>&1 || continue
     # </dev/null: never let a CLI wait on (or slurp) the loop's manifest pipe;
     # timeout: a hanging tool is a FAIL, not a stuck doctor.
-    if timeout 10 "$b" --version </dev/null >/dev/null 2>&1 \
-       || timeout 10 "$b" --help </dev/null >/dev/null 2>&1; then
+    if run_limited "$b" --version </dev/null >/dev/null 2>&1 \
+       || run_limited "$b" --help </dev/null >/dev/null 2>&1; then
       ok "$b answers --version/--help"
     else
       bad "$b: neither --version nor --help exits 0 within 10s"
