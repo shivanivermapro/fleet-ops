@@ -29,7 +29,7 @@ One line each, learned from the repos themselves, not their names.
 | programbench-bench | Harness-variation study on the ProgramBench paper's tasks; shell + python + Docker. |
 | dotfiles-nix | nix-darwin + home-manager flake; owns shell/git config, PATH, and the sync agent. THE config source of truth. |
 | gnhf | Overnight agent-run manager ("good night, have fun"). |
-| wheelhouse | IssueOps command center running on GitHub Actions; currently a diverged fork (2 local vs 73 upstream commits). |
+| wheelhouse | IssueOps command center running on GitHub Actions; fork state tracked in its manifest notes. |
 
 ## Aliases
 
@@ -82,5 +82,5 @@ On a fresh machine, apply the dotfiles-nix rebuild (nix plus the base toolchain)
 
 - Workspace root is `~/github` (pre-existing reality), not `~/dev`.
 - No mise/asdf introduced: Homebrew node v26 satisfies every engine pin in the fleet; presize's pnpm@8 is honored by corepack via its `packageManager` field. Revisit only if a repo pins an incompatible runtime.
-- Sync is ff-only (2026-08-11 decision); wheelhouse stays diverged until manually reconciled.
+- Sync is ff-only (2026-08-11 decision); a diverged fork stays diverged until manually reconciled (wheelhouse was, on 2026-08-12 - see its manifest notes).
 - `pull.rebase = true` kept from the nix config (prompt suggested false; overridden by explicit decision).

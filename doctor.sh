@@ -5,8 +5,10 @@
 #   repos present + on default branch + correct remotes
 #   identity resolves to Shreejit Verma <shreejitverma@gmail.com> everywhere
 #   no local user.email/user.name overrides
-#   every provides_bin resolves on PATH (and npm links point at the clones)
+#   every provides_bin resolves on PATH, duplicate copies on PATH are flagged
+#     (and npm links point at the clones)
 #   no alias/binary collisions from aliases.zsh
+#   repos.txt matches the manifest's sync: true list (server-side drift)
 #   sync LaunchAgent loaded, last sync run had no failures
 #   smoke: every CLI answers --version or --help with exit 0
 set -uo pipefail
