@@ -64,6 +64,7 @@ Two layers, no duplicates, forks stay pristine mirrors:
 4. Run `./gen-aliases.sh`, then `./bootstrap.sh`, then `./doctor.sh`, and ship the change (this directory is the fleet-ops repo).
 
 This directory IS the private `shreejitverma/fleet-ops` repo: manifest, scripts, identity files, and the server-side workflow are all version-controlled together. `logs/` and backups stay untracked.
+On a fresh machine, apply the dotfiles-nix rebuild (nix plus the base toolchain) manually before `bootstrap.sh` can fully succeed; bootstrap reports failures honestly and converges over re-runs.
 
 ## Disable sync
 

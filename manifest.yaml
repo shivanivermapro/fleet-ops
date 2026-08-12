@@ -166,7 +166,7 @@
   path: ~/github/treehouse
   kind: cli
   toolchain: [go, nix-flake]
-  install: "make build && install -m 755 treehouse $HOME/go/bin/treehouse"
+  install: "make build && install -d $HOME/go/bin && install -m 755 treehouse $HOME/go/bin/treehouse"
   install_mechanism: "explicit install to go/bin: upstream's make install uses the make-level $(GOPATH), unset under launchd, and would fall back to /usr/local/bin. A refreshed copy sits in ~/.local/bin until the go/bin PATH entry lands via rebuild; retire it after."
   provides_bin: [treehouse]
   aliases: {jump: cdth, run: th}
