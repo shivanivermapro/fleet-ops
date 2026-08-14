@@ -46,7 +46,7 @@
   path: ~/github/no-mistakes
   kind: cli
   toolchain: [go]
-  install: "make build && install -m 755 bin/no-mistakes $HOME/go/bin/no-mistakes"
+  install: "make build && install -d $HOME/go/bin && install -m 755 bin/no-mistakes $HOME/go/bin/no-mistakes"
   install_mechanism: "build + install to go/bin WITHOUT the daemon restart that upstream's make install does: the daemon rightly refuses to stop while a pipeline run is active, which failed the 2026-08-12 13:55 sync after the binary had installed fine. KeepAlive restarts the daemon onto the new binary naturally. A refreshed copy sits in ~/.local/bin until the go/bin PATH entry lands via rebuild; retire it after."
   provides_bin: [no-mistakes]
   aliases: {jump: cdnm, run: nm}
