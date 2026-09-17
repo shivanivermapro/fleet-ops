@@ -3,7 +3,7 @@
 # Idempotent: re-running changes nothing that is already correct.
 #
 # For every repo in manifest.yaml it:
-#   1. clones the fork if missing (origin = shreejitverma/<name>),
+#   1. clones the fork if missing (origin = <manifest owner>/<name>),
 #   2. ensures the upstream remote points at the manifest's upstream,
 #   3. runs the repo's install command only when a declared binary is missing,
 #   4. creates the npm global link for node CLIs whose bin is missing.
@@ -25,14 +25,15 @@ command -v git >/dev/null || { echo "git missing" >&2; exit 1; }
 command -v gh >/dev/null || { echo "gh missing (brew install gh; gh auth login)" >&2; exit 1; }
 gh auth status >/dev/null 2>&1 || { echo "gh not authenticated: run gh auth login" >&2; exit 1; }
 
-# Emit "name|upstream|install|bins" per manifest entry.
+# Emit "name|owner|upstream|install|bins" per manifest entry.
 entries() {
   awk '
     function flush() {
-      if (name != "") printf "%s|%s|%s|%s\n", name, upstream, install, bins
-      name = ""; upstream = ""; install = "none"; bins = ""
+      if (name != "") printf "%s|%s|%s|%s|%s\n", name, owner, upstream, install, bins
+      name = ""; owner = ""; upstream = ""; install = "none"; bins = ""
     }
     /^- name:/      { flush(); name = $3 }
+    /^  owner:/     { owner = $2 }
     /^  upstream:/  { upstream = $2 }
     /^  install:/   { install = $0; sub(/^  install: */, "", install); gsub(/^"|"$/, "", install); gsub(/\\"/, "\"", install) }
     /^  provides_bin:/ {
@@ -45,13 +46,13 @@ entries() {
 log "===== bootstrap start ====="
 failures=""
 
-while IFS='|' read -r name upstream install bins; do
+while IFS='|' read -r name owner upstream install bins; do
   d="$GH_ROOT/$name"
 
   # 1. Clone if missing.
   if [ ! -d "$d/.git" ]; then
-    log "[$name] cloning shreejitverma/$name"
-    gh repo clone "shreejitverma/$name" "$d" </dev/null >>"$LOG" 2>&1 \
+    log "[$name] cloning $owner/$name"
+    gh repo clone "$owner/$name" "$d" </dev/null >>"$LOG" 2>&1 \
       || { log "[$name] clone FAILED"; failures="$failures $name"; continue; }
   fi
 

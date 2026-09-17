@@ -1,11 +1,11 @@
 # Deployed copy: this file is the source for .github/workflows/fleet-sync.yml
-# in the private shreejitverma/fleet-ops repo (server-side sync layer).
+# in the private shivanivermapro/fleet-ops repo (server-side sync layer).
 # The per-fork rollout was rejected by design: a workflow commit on a fork's
 # default branch permanently diverges it from upstream, breaking ff-only sync.
 # One central repo loops all forks instead; forks stay pristine mirrors.
 #
 # Requires the FLEET_SYNC_TOKEN Actions secret: a fine-grained PAT with
-# Contents read-write on shreejitverma's repos (github.token only reaches the
+# Contents read-write on shivanivermapro's repos (github.token only reaches the
 # host repo). repos.txt in fleet-ops mirrors the manifest's sync: true list.
 name: fleet-sync
 on:
@@ -26,7 +26,7 @@ jobs:
           while IFS= read -r repo; do
             [ -z "$repo" ] && continue
             case "$repo" in \#*) continue ;; esac
-            out=$(gh repo sync "shreejitverma/$repo" 2>&1)
+            out=$(gh repo sync "shivanivermapro/$repo" 2>&1)
             status=$?
             if [ $status -eq 0 ]; then
               echo "ok        $repo: $out"

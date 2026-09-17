@@ -46,7 +46,7 @@ Fleet commands: `fleet-sync`, `fleet-sync-dry`, `fleet-doctor`, `fleet-status`, 
 Two layers, no duplicates, forks stay pristine mirrors:
 
 1. Local: `dotfiles-nix/files/bin/sync-forks` (manifest-driven) runs daily at 10:00 via the home-manager launchd agent `org.nix-community.home.sync-forks`, with `RunAtLoad` so a run missed while asleep fires on wake. Per repo it: re-asserts identity (strips local `user.email`/`user.name` overrides; a wrong resolved identity fails the repo); skips dirty trees, in-progress rebases/merges, and non-default branches; fetches and verifies `upstream/<branch>` exists; fast-forwards only (`--ff-only`); reports DIVERGED forks and never merges, rebases, or server-syncs them; calls `gh repo sync -b <branch>` server-side only when the fork has no local-only commits; pushes the default branch (normal push); re-runs the manifest `install` command when the repo updated, and a failed reinstall counts as a failure. Failures notify via macOS notification; success is silent.
-2. Server-side (works with the Mac off): the private `shreejitverma/fleet-ops` repo runs `.github/workflows/fleet-sync.yml` daily at 14:00 UTC, looping `repos.txt` (mirrored from this manifest's `sync: true` list) with `gh repo sync`. Per-fork workflow files were deliberately rejected: a workflow commit on a fork's default branch permanently diverges it, breaking ff-only sync. Needs the `FLEET_SYNC_TOKEN` secret (fine-grained PAT, Contents read-write).
+2. Server-side (works with the Mac off): the private `shivanivermapro/fleet-ops` repo runs `.github/workflows/fleet-sync.yml` daily at 14:00 UTC, looping `repos.txt` (mirrored from this manifest's `sync: true` list) with `gh repo sync`. Per-fork workflow files were deliberately rejected: a workflow commit on a fork's default branch permanently diverges it, breaking ff-only sync. Needs the `FLEET_SYNC_TOKEN` secret (fine-grained PAT, Contents read-write).
 
 `dotfiles-nix` itself is `sync: false`: it carries fork-specific commits and syncs from upstream via deliberate merge-commit PRs (see its CLAUDE.md); ff-only can never apply to it.
 
@@ -58,12 +58,12 @@ Two layers, no duplicates, forks stay pristine mirrors:
 
 ## Add a repo to the fleet
 
-1. Fork it under `shreejitverma` and clone to `~/github/<name>`.
+1. Fork it under `shivanivermapro` and clone to `~/github/<name>`.
 2. Add a manifest entry (copy an existing one; set `upstream`, `default_branch`, `install`, `provides_bin`, `aliases`).
 3. Regenerate the server-side list: `awk '/^- name:/ {name=$3} /^  sync: true/ {print name}' manifest.yaml > repos.txt`.
 4. Run `./gen-aliases.sh`, then `./bootstrap.sh`, then `./doctor.sh`, and ship the change (this directory is the fleet-ops repo).
 
-This directory IS the private `shreejitverma/fleet-ops` repo: manifest, scripts, identity files, and the server-side workflow are all version-controlled together. `logs/` and backups stay untracked.
+This directory IS the private `shivanivermapro/fleet-ops` repo: manifest, scripts, identity files, and the server-side workflow are all version-controlled together. `logs/` and backups stay untracked.
 On a fresh machine, apply the dotfiles-nix rebuild (nix plus the base toolchain) manually before `bootstrap.sh` can fully succeed; bootstrap reports failures honestly and converges over re-runs.
 
 ## Disable sync

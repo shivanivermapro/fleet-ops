@@ -3,7 +3,7 @@
 # Complements dotfiles-nix's ic-doctor (toolchain-wide); this one is
 # manifest-driven and covers exactly the fleet contract:
 #   repos present + on default branch + correct remotes
-#   identity resolves to Shreejit Verma <shreejitverma@gmail.com> everywhere
+#   identity resolves to Shivani Verma <shivaniverma.ira@gmail.com> everywhere
 #   no local user.email/user.name overrides
 #   every provides_bin resolves on PATH, duplicate copies on PATH are flagged
 #     (and npm links point at the clones)
@@ -16,7 +16,7 @@ set -uo pipefail
 GH_ROOT="$HOME/github"
 FLEET_DIR="$GH_ROOT/.fleet"
 MANIFEST="$FLEET_DIR/manifest.yaml"
-IDENT="Shreejit Verma <shreejitverma@gmail.com>"
+IDENT="Shivani Verma <shivaniverma.ira@gmail.com>"
 AGENT_LABEL="org.nix-community.home.sync-forks"
 
 fail=0
@@ -29,10 +29,11 @@ bad()  { printf '  FAIL  %s\n' "$*"; fail=1; }
 entries() {
   awk '
     function flush() {
-      if (name != "") printf "%s|%s|%s|%s|%s\n", name, branch, upstream, kind, bins
-      name = ""; branch = "main"; upstream = ""; kind = ""; bins = ""
+      if (name != "") printf "%s|%s|%s|%s|%s|%s\n", name, branch, upstream, kind, bins, owner
+      name = ""; branch = "main"; upstream = ""; kind = ""; bins = ""; owner = ""
     }
     /^- name:/           { flush(); name = $3 }
+    /^  owner:/          { owner = $2 }
     /^  default_branch:/ { branch = $2 }
     /^  upstream:/       { upstream = $2 }
     /^  kind:/           { kind = $2 }
@@ -44,7 +45,7 @@ entries() {
 }
 
 echo "== repos, remotes, identity =="
-while IFS='|' read -r name branch upstream kind bins; do
+while IFS='|' read -r name branch upstream kind bins owner; do
   d="$GH_ROOT/$name"
   if [ ! -d "$d/.git" ]; then bad "$name: not cloned at $d"; continue; fi
 
@@ -53,8 +54,8 @@ while IFS='|' read -r name branch upstream kind bins; do
 
   o=$(git -C "$d" remote get-url origin 2>/dev/null || echo "")
   case "$o" in
-    *github.com[:/]shreejitverma/"$name"*) ok "$name: origin is the fork" ;;
-    *) bad "$name: origin is '$o'" ;;
+    *github.com[:/]"$owner"/"$name"*) ok "$name: origin is the fork" ;;
+    *) bad "$name: origin is '$o' (manifest owner: $owner)" ;;
   esac
   u=$(git -C "$d" remote get-url upstream 2>/dev/null || echo "")
   case "$u" in
@@ -74,7 +75,7 @@ while IFS='|' read -r name branch upstream kind bins; do
 done < <(entries)
 
 echo "== binaries on PATH =="
-while IFS='|' read -r name branch upstream kind bins; do
+while IFS='|' read -r name branch upstream kind bins owner; do
   for b in $bins; do
     p=$(command -v "$b" 2>/dev/null || echo "")
     if [ -z "$p" ]; then bad "$b: not on PATH"; continue; fi
@@ -155,7 +156,7 @@ else
   warn "timeout not on PATH (brew install coreutils); smoke tests run without a 10s limit"
   run_limited() { "$@"; }
 fi
-while IFS='|' read -r name branch upstream kind bins; do
+while IFS='|' read -r name branch upstream kind bins owner; do
   # Only kind: cli binaries answer --version/--help. Running arbitrary
   # utility scripts (dotfiles' up, sync-forks, note, ...) with junk args
   # EXECUTES them - never smoke-test anything but real CLIs.

@@ -1,8 +1,11 @@
-# Fleet identity enforcement - included for every repo under ~/github/
-# via includeIf "gitdir:~/github/" (tracked in dotfiles-nix nix/home/common.nix).
-# Regenerable; do not put anything here except identity.
+# Fleet identity reference. NOTE: no includeIf wiring for this file exists in
+# dotfiles-nix (verified 2026-09-18; grep for "includeIf" there returns
+# nothing). Identity currently resolves from ~/.gitconfig directly, plus
+# home-manager's programs.git.settings.user in nix/user.nix, both of which
+# already carry this same identity. Keep this file in sync with those two
+# as the fleet-wide reference; do not put anything here except identity.
 [user]
-	name = Shreejit Verma
-	email = shreejitverma@gmail.com
+	name = Shivani Verma
+	email = shivaniverma.ira@gmail.com
 [github]
-	user = shreejitverma
+	user = shivanivermapro
