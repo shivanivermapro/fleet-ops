@@ -3,7 +3,7 @@
 # Idempotent: re-running changes nothing that is already correct.
 #
 # For every repo in manifest.yaml it:
-#   1. clones the fork if missing (origin = <manifest owner>/<name>),
+#   1. clones the fork if missing (origin = <manifest owner>/<repo, or name>),
 #   2. ensures the upstream remote points at the manifest's upstream,
 #   3. runs the repo's install command only when a declared binary is missing,
 #   4. creates the npm global link for node CLIs whose bin is missing.

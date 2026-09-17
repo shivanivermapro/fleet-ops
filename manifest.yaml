@@ -297,7 +297,7 @@
   provides_bin: [gprune, ic-doctor, ic-link, note, scratch, sync-forks, sysinfo, up]
   aliases: {jump: cddot}
   sync: false
-  notes: "SOURCE OF TRUTH for shell/git config. sync: false is deliberate: this fork carries fork-specific commits and syncs from upstream via manual merge-commit PRs (see its CLAUDE.md); it can never fast-forward, so ff-only sync would misreport it as diverged daily. Branch chore/sync-upstream-genealogy merged to main 2026-08-11. Upstream repo name differs: dotfiles-mac-nix."
+  notes: "SOURCE OF TRUTH for shell/git config. sync: false is deliberate: this fork carries fork-specific commits and syncs from upstream via manual merge-commit PRs (see its CLAUDE.md); it can never fast-forward, so ff-only sync would misreport it as diverged daily. Branch chore/sync-upstream-genealogy merged to main 2026-08-11."
 
 # --- Absorbed from the old sync-forks list (decision 2026-08-11: one list to rule them all) ---
 
