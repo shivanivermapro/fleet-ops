@@ -29,11 +29,12 @@ bad()  { printf '  FAIL  %s\n' "$*"; fail=1; }
 entries() {
   awk '
     function flush() {
-      if (name != "") printf "%s|%s|%s|%s|%s|%s\n", name, branch, upstream, kind, bins, owner
-      name = ""; branch = "main"; upstream = ""; kind = ""; bins = ""; owner = ""
+      if (name != "") printf "%s|%s|%s|%s|%s|%s|%s\n", name, branch, upstream, kind, bins, owner, (repo == "" ? name : repo)
+      name = ""; branch = "main"; upstream = ""; kind = ""; bins = ""; owner = ""; repo = ""
     }
     /^- name:/           { flush(); name = $3 }
     /^  owner:/          { owner = $2 }
+    /^  repo:/           { repo = $2 }
     /^  default_branch:/ { branch = $2 }
     /^  upstream:/       { upstream = $2 }
     /^  kind:/           { kind = $2 }
@@ -45,7 +46,7 @@ entries() {
 }
 
 echo "== repos, remotes, identity =="
-while IFS='|' read -r name branch upstream kind bins owner; do
+while IFS='|' read -r name branch upstream kind bins owner repo; do
   d="$GH_ROOT/$name"
   if [ ! -d "$d/.git" ]; then bad "$name: not cloned at $d"; continue; fi
 
@@ -54,8 +55,8 @@ while IFS='|' read -r name branch upstream kind bins owner; do
 
   o=$(git -C "$d" remote get-url origin 2>/dev/null || echo "")
   case "$o" in
-    *github.com[:/]"$owner"/"$name"*) ok "$name: origin is the fork" ;;
-    *) bad "$name: origin is '$o' (manifest owner: $owner)" ;;
+    *github.com[:/]"$owner"/"$repo"*) ok "$name: origin is the fork" ;;
+    *) bad "$name: origin is '$o' (manifest owner: $owner, repo: $repo)" ;;
   esac
   u=$(git -C "$d" remote get-url upstream 2>/dev/null || echo "")
   case "$u" in
@@ -75,7 +76,7 @@ while IFS='|' read -r name branch upstream kind bins owner; do
 done < <(entries)
 
 echo "== binaries on PATH =="
-while IFS='|' read -r name branch upstream kind bins owner; do
+while IFS='|' read -r name branch upstream kind bins owner repo; do
   for b in $bins; do
     p=$(command -v "$b" 2>/dev/null || echo "")
     if [ -z "$p" ]; then bad "$b: not on PATH"; continue; fi
@@ -156,7 +157,7 @@ else
   warn "timeout not on PATH (brew install coreutils); smoke tests run without a 10s limit"
   run_limited() { "$@"; }
 fi
-while IFS='|' read -r name branch upstream kind bins owner; do
+while IFS='|' read -r name branch upstream kind bins owner repo; do
   # Only kind: cli binaries answer --version/--help. Running arbitrary
   # utility scripts (dotfiles' up, sync-forks, note, ...) with junk args
   # EXECUTES them - never smoke-test anything but real CLIs.

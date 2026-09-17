@@ -7,6 +7,11 @@
 #   provides_bin: executables expected on PATH after install (empirically verified).
 #   install_mechanism: how the bin reaches PATH today.
 #   sync: include in daily upstream sync (ff-only policy; diverged forks are logged, never merged).
+#   repo: the actual GitHub repo name, only set when it differs from the local
+#     directory `name` (currently just dotfiles-nix, cloned under a clearer
+#     local name than its upstream/fork name dotfiles-mac-nix). Defaults to
+#     `name` when absent; doctor.sh and bootstrap.sh both read it for the
+#     origin URL/clone source instead of assuming name == repo.
 
 - name: lavish-axi
   owner: shivanivermapro
@@ -279,6 +284,7 @@
   notes: "Harness-variation study on the ProgramBench paper tasks. Not in current sync-forks list; added under fleet sync."
 
 - name: dotfiles-nix
+  repo: dotfiles-mac-nix
   owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/dotfiles-mac-nix
