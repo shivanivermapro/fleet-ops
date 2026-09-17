@@ -9,7 +9,7 @@
 #   sync: include in daily upstream sync (ff-only policy; diverged forks are logged, never merged).
 
 - name: lavish-axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/lavish-axi
   default_branch: main
@@ -24,7 +24,7 @@
   notes: "HTML artifact editor CLI. Ships Claude skill (skills/lavish) and plugin.json. Already in sync-forks."
 
 - name: firstmate
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/firstmate
   default_branch: main
@@ -39,7 +39,7 @@
   notes: "Agent-crew orchestration distro (tmux/worktree based). Provides the stow skill via ic-link. Already in sync-forks."
 
 - name: no-mistakes
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/no-mistakes
   default_branch: main
@@ -54,7 +54,7 @@
   notes: "Ship gate pipeline (review/tests/lint/push/PR/CI). Has its own LaunchAgent daemon (com.kunchenguid.no-mistakes.daemon). Ships Claude skill. Already in sync-forks."
 
 - name: axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/axi
   default_branch: main
@@ -69,7 +69,7 @@
   notes: "AXI design principles + JS SDK. Docs tooling only at root. Already in sync-forks."
 
 - name: chrome-devtools-axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/chrome-devtools-axi
   default_branch: main
@@ -84,7 +84,7 @@
   notes: "Agent-ergonomic browser automation CLI. Ships Claude skill. Already in sync-forks."
 
 - name: gh-axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/gh-axi
   default_branch: main
@@ -99,7 +99,7 @@
   notes: "GitHub CLI for agents. Ships Claude skill. Already in sync-forks."
 
 - name: autopreso
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/autopreso
   default_branch: main
@@ -114,7 +114,7 @@
   notes: "Realtime speech-to-presentation. Not in old sync-forks list; added under fleet sync."
 
 - name: baby-menu
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/baby-menu
   default_branch: main
@@ -129,7 +129,7 @@
   notes: "Not in current sync-forks list; added under fleet sync."
 
 - name: tasks-axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/tasks-axi
   default_branch: main
@@ -144,7 +144,7 @@
   notes: "Backlog/task CLI. Ships Claude skill. Already in sync-forks."
 
 - name: quota-axi
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/quota-axi
   default_branch: main
@@ -159,7 +159,7 @@
   notes: "LLM subscription quota CLI. Ships Claude skill. Already in sync-forks."
 
 - name: treehouse
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/treehouse
   default_branch: main
@@ -174,7 +174,7 @@
   notes: "Git worktree manager. Already in sync-forks."
 
 - name: short-pipe
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/short-pipe
   default_branch: main
@@ -189,7 +189,7 @@
   notes: "Not in current sync-forks list; added under fleet sync."
 
 - name: trial-by-combat
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/trial-by-combat
   default_branch: main
@@ -204,7 +204,7 @@
   notes: "Two-LLM grid combat arena/benchmark. Not in current sync-forks list; added under fleet sync."
 
 - name: justroll
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/justroll
   default_branch: main
@@ -219,7 +219,7 @@
   notes: "Not in old sync-forks list; added under fleet sync."
 
 - name: presize
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/presize
   default_branch: main
@@ -234,7 +234,7 @@
   notes: "Oldest repo (last push 2026-05). Not in current sync-forks list; added under fleet sync."
 
 - name: org-bench
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/org-bench
   default_branch: main
@@ -249,7 +249,7 @@
   notes: "Not in current sync-forks list; added under fleet sync."
 
 - name: superpowers-bench
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/superpowers-bench
   default_branch: master
@@ -264,7 +264,7 @@
   notes: "Default branch is master, not main. Not in current sync-forks list; added under fleet sync."
 
 - name: programbench-bench
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/programbench-bench
   default_branch: main
@@ -279,7 +279,7 @@
   notes: "Harness-variation study on the ProgramBench paper tasks. Not in current sync-forks list; added under fleet sync."
 
 - name: dotfiles-nix
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/dotfiles-mac-nix
   default_branch: main
@@ -296,7 +296,7 @@
 # --- Absorbed from the old sync-forks list (decision 2026-08-11: one list to rule them all) ---
 
 - name: gnhf
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/gnhf
   default_branch: main
@@ -311,7 +311,7 @@
   notes: "Overnight agent-run manager (good night, have fun). Ships Claude skill. Was in old sync-forks list; not part of the original 19."
 
 - name: wheelhouse
-  owner: shreejitverma
+  owner: shivanivermapro
   is_fork: true
   upstream: kunchenguid/wheelhouse
   default_branch: main
