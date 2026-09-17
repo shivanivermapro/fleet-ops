@@ -74,9 +74,9 @@ On a fresh machine, apply the dotfiles-nix rebuild (nix plus the base toolchain)
 ## Undo everything the fleet setup did
 
 - Identity: restore `~/.gitconfig.bak.<ts>` over `~/.gitconfig` (re-adds the stale stevens.edu email; not recommended).
-- dotfiles-nix changes (git config includeIf + github.user, daily sync schedule, manifest-driven sync-forks, aliases hook): `git log` in `~/github/dotfiles-nix`, revert the fleet commits, rebuild.
+- dotfiles-nix changes (`nix/user.nix` git identity, github.user, daily sync schedule, manifest-driven sync-forks, aliases hook): `git log` in `~/github/dotfiles-nix`, revert the fleet commits, rebuild.
 - Installed CLIs: `npm -g unlink autopreso justroll` (the others predate the fleet).
-- This directory: `rm -rf ~/github/.fleet` (nothing else references it except the includeIf, which degrades gracefully - git ignores a missing include file).
+- This directory: `rm -rf ~/github/.fleet` (identity lives independently in `~/.gitconfig` and `nix/user.nix`, not here, so removal doesn't affect it; sync-forks and the aliases.zsh sourcing will simply stop working).
 
 ## Decisions on record
 
