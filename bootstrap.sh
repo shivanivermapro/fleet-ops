@@ -3,7 +3,7 @@
 # Idempotent: re-running changes nothing that is already correct.
 #
 # For every repo in manifest.yaml it:
-#   1. clones the fork if missing (origin = <manifest owner>/<name>),
+#   1. clones the fork if missing (origin = <manifest owner>/<repo, or name>),
 #   2. ensures the upstream remote points at the manifest's upstream,
 #   3. runs the repo's install command only when a declared binary is missing,
 #   4. creates the npm global link for node CLIs whose bin is missing.
@@ -25,15 +25,19 @@ command -v git >/dev/null || { echo "git missing" >&2; exit 1; }
 command -v gh >/dev/null || { echo "gh missing (brew install gh; gh auth login)" >&2; exit 1; }
 gh auth status >/dev/null 2>&1 || { echo "gh not authenticated: run gh auth login" >&2; exit 1; }
 
-# Emit "name|owner|upstream|install|bins" per manifest entry.
+# Emit "name|owner|repo|upstream|install|bins" per manifest entry. repo is the
+# actual GitHub repo name, defaulting to name when the manifest omits it
+# (they differ only for dotfiles-nix, cloned locally under a clearer name
+# than its upstream/fork name dotfiles-mac-nix).
 entries() {
   awk '
     function flush() {
-      if (name != "") printf "%s|%s|%s|%s|%s\n", name, owner, upstream, install, bins
-      name = ""; owner = ""; upstream = ""; install = "none"; bins = ""
+      if (name != "") printf "%s|%s|%s|%s|%s|%s\n", name, owner, (repo == "" ? name : repo), upstream, install, bins
+      name = ""; owner = ""; repo = ""; upstream = ""; install = "none"; bins = ""
     }
     /^- name:/      { flush(); name = $3 }
     /^  owner:/     { owner = $2 }
+    /^  repo:/      { repo = $2 }
     /^  upstream:/  { upstream = $2 }
     /^  install:/   { install = $0; sub(/^  install: */, "", install); gsub(/^"|"$/, "", install); gsub(/\\"/, "\"", install) }
     /^  provides_bin:/ {
@@ -46,13 +50,13 @@ entries() {
 log "===== bootstrap start ====="
 failures=""
 
-while IFS='|' read -r name owner upstream install bins; do
+while IFS='|' read -r name owner repo upstream install bins; do
   d="$GH_ROOT/$name"
 
   # 1. Clone if missing.
   if [ ! -d "$d/.git" ]; then
-    log "[$name] cloning $owner/$name"
-    gh repo clone "$owner/$name" "$d" </dev/null >>"$LOG" 2>&1 \
+    log "[$name] cloning $owner/$repo"
+    gh repo clone "$owner/$repo" "$d" </dev/null >>"$LOG" 2>&1 \
       || { log "[$name] clone FAILED"; failures="$failures $name"; continue; }
   fi
 
